@@ -10,14 +10,24 @@ import {
   Portal,
   MenuList,
   MenuItem,
+  useToast,
 } from "@chakra-ui/react";
 import { BsInstagram } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
 
 const UserHeader = () => {
+  const toast = useToast();
+
   const copyURL = () => {
     const currentURL = window.location.href;
-    navigator.clipboard.writeText(currentURL);
+    navigator.clipboard.writeText(currentURL).then(() => {
+      toast({
+        description: "Profile link copied.",
+        duration: 3000,
+        isClosable: true,
+        status: "success",
+      });
+    });
   };
 
   return (
