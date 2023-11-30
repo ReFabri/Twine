@@ -53,6 +53,15 @@ const UserPost = () => {
               <BsThreeDots />
             </Flex>
           </Flex>
+          <Text fontSize={"sm"}>A day at the office</Text>
+          <Box
+            borderRadius={6}
+            overflow={"hidden"}
+            border={"1px solid"}
+            borderColor={"gray.light"}
+          >
+            <Image src="post1.jpg" w={"full"} />
+          </Box>
         </Flex>
       </Flex>
     </Link>
