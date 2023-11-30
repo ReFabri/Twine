@@ -1,4 +1,5 @@
 import { Flex } from "@chakra-ui/react";
+import PropTypes from "prop-types";
 
 const Actions = ({ liked, setLiked }) => {
   return (
@@ -85,6 +86,11 @@ const Actions = ({ liked, setLiked }) => {
       </svg>
     </Flex>
   );
+};
+
+Actions.propTypes = {
+  liked: PropTypes.string,
+  setLiked: PropTypes.func,
 };
 
 export default Actions;
