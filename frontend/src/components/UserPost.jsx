@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Flex, Avatar, Box, Text, Image } from "@chakra-ui/react";
 import { BsThreeDots } from "react-icons/bs";
+import PropTypes from "prop-types";
 import Actions from "./Actions";
 
-const UserPost = () => {
+const UserPost = ({ likes, replies, postImg, postTitle }) => {
   const [liked, setLiked] = useState(false);
 
   return (
@@ -83,6 +84,13 @@ const UserPost = () => {
       </Flex>
     </Link>
   );
+};
+
+UserPost.propTypes = {
+  likes: PropTypes.number,
+  replies: PropTypes.number,
+  postImg: PropTypes.string,
+  postTitle: PropTypes.string,
 };
 
 export default UserPost;
