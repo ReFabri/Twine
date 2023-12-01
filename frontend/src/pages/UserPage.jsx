@@ -5,7 +5,30 @@ const UserPage = () => {
   return (
     <>
       <UserHeader />
-      <UserPost />
+      <UserPost
+        likes={475}
+        replies={264}
+        postImg="post1.jpg"
+        postTitle="Let's talk about twine!"
+      />
+      <UserPost
+        likes={35}
+        replies={46}
+        postImg="post1.jpg"
+        postTitle="Twine is awesome!"
+      />
+      <UserPost
+        likes={297}
+        replies={165}
+        postImg="post1.jpg"
+        postTitle="Twine is the best invention since sliced bread!"
+      />
+      <UserPost
+        likes={28}
+        replies={1262}
+        postImg="post1.jpg"
+        postTitle="Twine is very Twine!"
+      />
     </>
   );
 };
