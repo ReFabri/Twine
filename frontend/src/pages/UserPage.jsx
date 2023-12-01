@@ -5,6 +5,7 @@ const UserPage = () => {
   return (
     <>
       <UserHeader />
+      <UserPost likes={475} replies={264} postTitle="First post!" />
       <UserPost
         likes={475}
         replies={264}
@@ -14,7 +15,7 @@ const UserPage = () => {
       <UserPost
         likes={35}
         replies={46}
-        postImg="post1.jpg"
+        postImg="post2.jpg"
         postTitle="Twine is awesome!"
       />
       <UserPost
@@ -26,7 +27,7 @@ const UserPage = () => {
       <UserPost
         likes={28}
         replies={1262}
-        postImg="post1.jpg"
+        postImg="post2.jpg"
         postTitle="Twine is very Twine!"
       />
     </>

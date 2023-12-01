@@ -89,7 +89,7 @@ const Actions = ({ liked, setLiked }) => {
 };
 
 Actions.propTypes = {
-  liked: PropTypes.string,
+  liked: PropTypes.bool,
   setLiked: PropTypes.func,
 };
 

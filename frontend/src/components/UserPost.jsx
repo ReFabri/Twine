@@ -59,25 +59,27 @@ const UserPost = ({ likes, replies, postImg, postTitle }) => {
               <BsThreeDots />
             </Flex>
           </Flex>
-          <Text fontSize={"sm"}>A day at the office</Text>
-          <Box
-            borderRadius={6}
-            overflow={"hidden"}
-            border={"1px solid"}
-            borderColor={"gray.light"}
-          >
-            <Image src="post1.jpg" w={"full"} />
-          </Box>
+          <Text fontSize={"sm"}>{postTitle}</Text>
+          {postImg && (
+            <Box
+              borderRadius={6}
+              overflow={"hidden"}
+              border={"1px solid"}
+              borderColor={"gray.light"}
+            >
+              <Image src={postImg} w={"full"} />
+            </Box>
+          )}
           <Flex gap={3} my={1}>
             <Actions liked={liked} setLiked={setLiked} />
           </Flex>
           <Flex gap={2} alignItems={"center"}>
             <Text color={"gray.light"} fontSize={"sm"}>
-              123 replies
+              {replies} replies
             </Text>
             <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"}></Box>
             <Text color={"gray.light"} fontSize={"sm"}>
-              456 likes
+              {likes} likes
             </Text>
           </Flex>
         </Flex>
