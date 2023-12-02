@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { Flex, Avatar, Text } from "@chakra-ui/react";
+import { Flex, Avatar, Text, Divider } from "@chakra-ui/react";
+import { BsThreeDots } from "react-icons/bs";
+import Actions from "./Actions";
 
 const Comment = () => {
   const [liked, setLiked] = useState(false);
@@ -17,9 +19,21 @@ const Comment = () => {
             <Text fontSize={"sm"} fontWeight={"bold"}>
               duderealperson
             </Text>
+            <Flex gap={2} alignItems={"center"}>
+              <Text fontSize={"sm"} color={"gray.light"}>
+                1d
+              </Text>
+              <BsThreeDots />
+            </Flex>
           </Flex>
+          <Text>Hey, this looks great!</Text>
+          <Actions liked={liked} setLiked={setLiked} />
+          <Text fontSize={"sm"} color={"gray.light"}>
+            {100 + (liked ? 1 : 0)} likes
+          </Text>
         </Flex>
       </Flex>
+      <Divider />
     </>
   );
 };

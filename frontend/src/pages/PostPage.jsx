@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { BsThreeDots } from "react-icons/bs";
 import Actions from "../components/Actions";
+import Comment from "../components/Comment";
 
 const PostPage = () => {
   const [liked, setLiked] = useState(false);
@@ -64,6 +65,7 @@ const PostPage = () => {
         <Button>Get</Button>
       </Flex>
       <Divider my={4} />
+      <Comment />
     </>
   );
 };
