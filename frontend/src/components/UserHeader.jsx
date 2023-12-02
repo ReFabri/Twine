@@ -38,12 +38,13 @@ const UserHeader = () => {
             Dude Realperson
           </Text>
           <Flex gap={2} alignItems={"center"}>
-            <Text fontSize={"sm"}>realdude</Text>
+            <Text fontSize={"xs"}>realdude</Text>
             <Text
               fontSize={"xs"}
               bg={"gray.dark"}
               color={"gray.light"}
-              p={1}
+              paddingY={1}
+              paddingX={2}
               borderRadius={"full"}
             >
               twine.net
@@ -51,7 +52,11 @@ const UserHeader = () => {
           </Flex>
         </Box>
         <Box>
-          <Avatar name="Dude Realperson" src="/avatar.jpg" size={"xl"} />
+          <Avatar
+            name="Dude Realperson"
+            src="/avatar.jpg"
+            size={{ base: "md", md: "xl" }}
+          />
         </Box>
       </Flex>
       <Text>
