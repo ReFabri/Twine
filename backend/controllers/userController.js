@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import generateToken from "../utils/helpers/generateToken.js";
 import User from "../models/userModel.js";
 
 export const signupUser = async (req, res) => {
@@ -22,6 +23,7 @@ export const signupUser = async (req, res) => {
     await newUser.save();
 
     if (newUser) {
+      generateToken(newUser._id, res);
       res.status(201).json({
         _id: newUser._id,
         name: newUser.name,
@@ -39,5 +41,14 @@ export const signupUser = async (req, res) => {
       console.error(error);
       res.status(500).json({ message: error });
     }
+  }
+};
+
+export const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
