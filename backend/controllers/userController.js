@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/helpers/generateToken.js";
+import errorHandler from "../utils/helpers/errorHandler.js";
 import User from "../models/userModel.js";
 
 export const signupUser = async (req, res) => {
@@ -34,21 +35,28 @@ export const signupUser = async (req, res) => {
       res.status(400).json({ message: "Invalid user data" });
     }
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(error.message);
-      res.status(500).json({ message: error.message });
-    } else {
-      console.error(error);
-      res.status(500).json({ message: error });
-    }
+    errorHandler(error, res);
   }
 };
 
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    const validPassword = await bcrypt.compare(password, user.password);
+
+    if (!user || !validPassword)
+      return res.status(400).json({ message: "Invalid username or password" });
+
+    generateToken(user._id, res);
+
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    errorHandler(error, res);
   }
 };
