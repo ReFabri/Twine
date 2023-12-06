@@ -60,3 +60,12 @@ export const loginUser = async (req, res) => {
     errorHandler(error, res);
   }
 };
+
+export const logoutUser = async (req, res) => {
+  try {
+    res.cookie("token", "", { maxAge: 1 });
+    res.status(200).json({ message: "User logged out successfully" });
+  } catch (error) {
+    errorHandler(error, res);
+  }
+};
