@@ -69,3 +69,13 @@ export const logoutUser = async (req, res) => {
     errorHandler(error, res);
   }
 };
+
+export const followUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userToFollow = await User.findById(id);
+    const currentUser = await User.findById(req.user._id);
+  } catch (error) {
+    errorHandler(error, res);
+  }
+};
