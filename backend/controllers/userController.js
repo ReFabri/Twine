@@ -75,6 +75,18 @@ export const followUser = async (req, res) => {
     const { id } = req.params;
     const userToFollow = await User.findById(id);
     const currentUser = await User.findById(req.user._id);
+    if (id === req.user._id)
+      return res.status(400).json({ message: "Unable to follow own user" });
+    if (!userToFollow || !currentUser)
+      return res.status(400).json({ message: "User not found" });
+    const isFollowing = currentUser.following.includes(id);
+    if (isFollowing) {
+      await User.findByIdAndUpdate(req.user._id, { $pull: { following: id } });
+      await User.findByIdAndUpdate(id, { $pull: { followers: req.user._id } });
+    } else {
+      await User.findByIdAndUpdate(req.user._id, { $push: { following: id } });
+      await User.findByIdAndUpdate(id, { $push: { followers: req.user._id } });
+    }
   } catch (error) {
     errorHandler(error, res);
   }
