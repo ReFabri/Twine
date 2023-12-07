@@ -125,3 +125,14 @@ export const updateUser = async (req, res) => {
     errorHandler(error, res);
   }
 };
+
+export const getUserProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).select("-password");
+    if (!user) return res.status(400).json({ message: "User not found" });
+    return res.status(200).json(user);
+  } catch (error) {
+    errorHandler(error, res);
+  }
+};
