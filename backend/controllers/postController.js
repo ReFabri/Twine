@@ -1,4 +1,4 @@
-import errorHandler from "../utils/helpers/errorHandler";
+import errorHandler from "../utils/helpers/errorHandler.js";
 
 export const createPost = async (req, res) => {
   try {
