@@ -97,7 +97,12 @@ export const followUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { name, username, email, password, profilePic, bio } = req.body;
+    const { id } = req.params;
     const userId = req.user._id;
+
+    if (id !== String(userId))
+      return res.status(401).json({ message: "Unauthorized" });
+
     let user = await User.findById(userId);
     if (!user) return res.status(400).json({ message: "User not found" });
 
