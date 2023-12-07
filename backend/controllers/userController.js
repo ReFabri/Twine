@@ -93,3 +93,30 @@ export const followUser = async (req, res) => {
     errorHandler(error, res);
   }
 };
+
+export const updateUser = async (req, res) => {
+  try {
+    const { name, username, email, password, profilePic, bio } = req.body;
+    const userId = req.user._id;
+    let user = await User.findById(userId);
+    if (!user) return res.status(400).json({ message: "User not found" });
+
+    if (password) {
+      const salt = await bcrypt.genSalt(12);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      user.password = hashedPassword;
+    }
+
+    user.name = name || user.name;
+    user.username = username || user.username;
+    user.email = email || user.email;
+    user.profilePic = profilePic || user.profilePic;
+    user.bio = bio || user.bio;
+
+    user = await user.save();
+
+    return res.status(200).json({ message: "User profile updated", user });
+  } catch (error) {
+    errorHandler(error, res);
+  }
+};
