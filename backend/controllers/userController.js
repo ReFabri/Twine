@@ -75,7 +75,7 @@ export const followUser = async (req, res) => {
     const { id } = req.params;
     const userToFollow = await User.findById(id);
     const currentUser = await User.findById(req.user._id);
-    if (id === req.user._id)
+    if (id === String(req.user._id))
       return res.status(400).json({ message: "Unable to follow own user" });
     if (!userToFollow || !currentUser)
       return res.status(400).json({ message: "User not found" });
