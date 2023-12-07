@@ -25,14 +25,14 @@ export const signupUser = async (req, res) => {
 
     if (newUser) {
       generateToken(newUser._id, res);
-      res.status(201).json({
+      return res.status(201).json({
         _id: newUser._id,
         name: newUser.name,
         username: newUser.username,
         email: newUser.email,
       });
     } else {
-      res.status(400).json({ message: "Invalid user data" });
+      return res.status(400).json({ message: "Invalid user data" });
     }
   } catch (error) {
     errorHandler(error, res);
@@ -50,7 +50,7 @@ export const loginUser = async (req, res) => {
 
     generateToken(user._id, res);
 
-    res.status(200).json({
+    return res.status(200).json({
       _id: user._id,
       name: user.name,
       username: user.username,
@@ -64,7 +64,7 @@ export const loginUser = async (req, res) => {
 export const logoutUser = async (req, res) => {
   try {
     res.cookie("token", "", { maxAge: 1 });
-    res.status(200).json({ message: "User logged out successfully" });
+    return res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
     errorHandler(error, res);
   }
@@ -128,8 +128,10 @@ export const updateUser = async (req, res) => {
 
 export const getUserProfile = async (req, res) => {
   try {
-    const { id } = req.params;
-    const user = await User.findById(id).select("-password");
+    const { username } = req.params;
+    const user = await User.findOne({ username })
+      .select("-password")
+      .select("-updatedAt");
     if (!user) return res.status(400).json({ message: "User not found" });
     return res.status(200).json(user);
   } catch (error) {
