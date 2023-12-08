@@ -72,7 +72,26 @@ export const deletePost = async (req, res) => {
 
 export const likeUnlikePost = async (req, res) => {
   try {
-    res.send("ROUTE TODO");
+    const { id: postId } = req.params;
+    const userId = req.user._id;
+
+    const post = await Post.findById(postId);
+
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    const isPostLiked = post.likes.includes(userId);
+
+    if (isPostLiked) {
+      await Post.updateOne({ _id: postId }, { $pull: { likes: userId } });
+    } else {
+      await Post.updateOne({ _id: postId }, { $push: { likes: userId } });
+    }
+
+    return res
+      .status(200)
+      .json({
+        message: `Post ${isPostLiked ? "disliked" : "liked"} successfully`,
+      });
   } catch (error) {
     errorHandler(error, res);
   }
