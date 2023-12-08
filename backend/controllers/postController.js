@@ -36,7 +36,15 @@ export const createPost = async (req, res) => {
 
 export const getPost = async (req, res) => {
   try {
-    res.send("ROUTE TODO");
+    const { id } = req.params;
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    res.status(200).json(post);
   } catch (error) {
     errorHandler(error, res);
   }

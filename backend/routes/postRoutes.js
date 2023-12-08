@@ -14,5 +14,6 @@ import {
 const router = express.Router();
 
 router.post("/create", protectRoute, createPost);
+router.get("/:id", getPost);
 
 export default router;
