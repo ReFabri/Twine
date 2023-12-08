@@ -1,4 +1,5 @@
 import express from "express";
+import protectRoute from "../middlewares/protectRoute.js";
 
 import {
   createPost,
@@ -12,6 +13,6 @@ import {
 
 const router = express.Router();
 
-router.post("/create", createPost);
+router.post("/create", protectRoute, createPost);
 
 export default router;
