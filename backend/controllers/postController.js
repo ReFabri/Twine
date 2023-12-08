@@ -52,7 +52,19 @@ export const getPost = async (req, res) => {
 
 export const deletePost = async (req, res) => {
   try {
-    res.send("ROUTE TODO");
+    const post = await Post.findById(req.params.id);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (String(post.postedBy) !== String(req.user._id)) {
+      return res.status(401).json({ message: "Unauthorized to delete post" });
+    }
+
+    await Post.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({ message: "Post deleted successfully" });
   } catch (error) {
     errorHandler(error, res);
   }
