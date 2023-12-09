@@ -18,5 +18,6 @@ router.get("/:id", getPost);
 router.delete("/:id", protectRoute, deletePost);
 router.post("/like/:id", protectRoute, likeUnlikePost);
 router.post("/reply/:id", protectRoute, replyToPost);
+router.get("/feed", protectRoute, getFeedPosts);
 
 export default router;
