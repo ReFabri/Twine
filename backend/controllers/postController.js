@@ -121,7 +121,7 @@ export const replyToPost = async (req, res) => {
 
 export const getFeedPosts = async (req, res) => {
   try {
-    const { id: userId } = req.user;
+    const { _id: userId } = req.user;
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
@@ -130,7 +130,7 @@ export const getFeedPosts = async (req, res) => {
       createdAt: -1,
     });
 
-    res.status(200).json({ message: "" });
+    res.status(200).json(feedPosts);
   } catch (error) {
     errorHandler(error, res);
   }
@@ -138,6 +138,7 @@ export const getFeedPosts = async (req, res) => {
 
 export const getUserPosts = async (req, res) => {
   try {
+    const { username } = req.params;
     const user = await User.findOne({ username });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
