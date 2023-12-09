@@ -73,7 +73,7 @@ export const deletePost = async (req, res) => {
 export const likeUnlikePost = async (req, res) => {
   try {
     const { id: postId } = req.params;
-    const userId = req.user._id;
+    const { _id: userId } = req.user;
 
     const post = await Post.findById(postId);
 
@@ -87,11 +87,9 @@ export const likeUnlikePost = async (req, res) => {
       await Post.updateOne({ _id: postId }, { $push: { likes: userId } });
     }
 
-    return res
-      .status(200)
-      .json({
-        message: `Post ${isPostLiked ? "disliked" : "liked"} successfully`,
-      });
+    return res.status(200).json({
+      message: `Post ${isPostLiked ? "unliked" : "liked"} successfully`,
+    });
   } catch (error) {
     errorHandler(error, res);
   }
@@ -99,7 +97,23 @@ export const likeUnlikePost = async (req, res) => {
 
 export const replyToPost = async (req, res) => {
   try {
-    res.send("ROUTE TODO");
+    const { id: postId } = req.params;
+    const { _id: userId, profilePic: userProfilePic, username } = req.user;
+    const { text } = req.body;
+
+    if (!text?.trim())
+      return res.status(400).json({ message: "Reply text is required" });
+
+    const post = await Post.findById(postId);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    const reply = { userId, text, userProfilePic, username };
+    post.replies.push(reply);
+    await post.save();
+
+    return res
+      .status(200)
+      .json({ message: "Successfully replied to post", post });
   } catch (error) {
     errorHandler(error, res);
   }
