@@ -121,7 +121,16 @@ export const replyToPost = async (req, res) => {
 
 export const getFeedPosts = async (req, res) => {
   try {
-    res.send("ROUTE TODO");
+    const { id: userId } = req.user;
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const following = user.following;
+    const feedPosts = await Post.find({ postedBy: { $in: following } }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({ message: "" });
   } catch (error) {
     errorHandler(error, res);
   }
@@ -129,7 +138,16 @@ export const getFeedPosts = async (req, res) => {
 
 export const getUserPosts = async (req, res) => {
   try {
-    res.send("ROUTE TODO");
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const posts = await Post.find({ postedBy: user._id }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json(posts);
   } catch (error) {
     errorHandler(error, res);
   }
