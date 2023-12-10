@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { BiSolidShow, BiSolidHide } from "react-icons/bi";
+import { useSetRecoilState } from "recoil";
+import authScreenAtom from "../atoms/authAtom";
 import {
   Flex,
   Box,
@@ -17,17 +19,18 @@ import {
 } from "@chakra-ui/react";
 
 const LoginCard = () => {
-  const [authScreen, setAuthScreen] = useState("TODO");
+  const setAuthScreen = useSetRecoilState(authScreenAtom);
   const [showPassword, setShowPassword] = useState(false);
-  const [inputs, setInputs] = useState({
+  const [inputs, setInputs] = useState(() => ({
+    name: "",
+    username: "",
     email: "",
     password: "",
-  });
+  }));
 
   const handleLogin = (e) => {
     //TODO
     e.preventDefault();
-    console.log(authScreen);
   };
 
   return (
@@ -51,7 +54,10 @@ const LoginCard = () => {
               <Input
                 type="text"
                 onChange={(e) =>
-                  setInputs({ ...inputs, username: e.target.value })
+                  setInputs((prev) => ({
+                    ...prev,
+                    username: e.target.value,
+                  }))
                 }
                 value={inputs.username}
               />
@@ -62,7 +68,10 @@ const LoginCard = () => {
                 <Input
                   type={showPassword ? "text" : "password"}
                   onChange={(e) =>
-                    setInputs({ ...inputs, password: e.target.value })
+                    setInputs((prev) => ({
+                      ...prev,
+                      password: e.target.value,
+                    }))
                   }
                   value={inputs.password}
                 />

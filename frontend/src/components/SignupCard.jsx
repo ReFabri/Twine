@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { BiSolidShow, BiSolidHide } from "react-icons/bi";
+import { useSetRecoilState } from "recoil";
+import authScreenAtom from "../atoms/authAtom";
 import {
   Flex,
   Box,
@@ -18,19 +20,18 @@ import {
 } from "@chakra-ui/react";
 
 const SignupCard = () => {
-  const [authScreen, setAuthScreen] = useState("TODO");
+  const setAuthScreen = useSetRecoilState(authScreenAtom);
   const [showPassword, setShowPassword] = useState(false);
-  const [inputs, setInputs] = useState({
+  const [inputs, setInputs] = useState(() => ({
     name: "",
     username: "",
     email: "",
     password: "",
-  });
+  }));
 
   const handleSignup = (e) => {
     //TODO
     e.preventDefault();
-    console.log(authScreen);
   };
 
   return (
@@ -55,7 +56,7 @@ const SignupCard = () => {
                   <Input
                     type="text"
                     onChange={(e) =>
-                      setInputs({ ...inputs, name: e.target.value })
+                      setInputs((prev) => ({ ...prev, name: e.target.value }))
                     }
                     value={inputs.name}
                   />
@@ -67,7 +68,10 @@ const SignupCard = () => {
                   <Input
                     type="text"
                     onChange={(e) =>
-                      setInputs({ ...inputs, username: e.target.value })
+                      setInputs((prev) => ({
+                        ...prev,
+                        username: e.target.value,
+                      }))
                     }
                     value={inputs.username}
                   />
@@ -79,7 +83,7 @@ const SignupCard = () => {
               <Input
                 type="email"
                 onChange={(e) =>
-                  setInputs({ ...inputs, email: e.target.value })
+                  setInputs((prev) => ({ ...prev, email: e.target.value }))
                 }
                 value={inputs.email}
               />
@@ -90,7 +94,7 @@ const SignupCard = () => {
                 <Input
                   type={showPassword ? "text" : "password"}
                   onChange={(e) =>
-                    setInputs({ ...inputs, password: e.target.value })
+                    setInputs((prev) => ({ ...prev, password: e.target.value }))
                   }
                   value={inputs.password}
                 />
