@@ -9,7 +9,7 @@ export const signupUser = async (req, res) => {
     const user = await User.findOne({ $or: [{ email }, { username }] });
 
     if (user) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ error: "User already exists" });
     }
 
     const salt = await bcrypt.genSalt(12);
@@ -32,7 +32,7 @@ export const signupUser = async (req, res) => {
         email: newUser.email,
       });
     } else {
-      return res.status(400).json({ message: "Invalid user data" });
+      return res.status(400).json({ error: "Invalid user data" });
     }
   } catch (error) {
     errorHandler(error, res);
@@ -46,7 +46,7 @@ export const loginUser = async (req, res) => {
     const validPassword = await bcrypt.compare(password, user?.password || "");
 
     if (!user || !validPassword)
-      return res.status(400).json({ message: "Invalid username or password" });
+      return res.status(400).json({ error: "Invalid username or password" });
 
     generateToken(user._id, res);
 
@@ -76,9 +76,9 @@ export const followUser = async (req, res) => {
     const userToFollow = await User.findById(id);
     const currentUser = await User.findById(req.user._id);
     if (id === String(req.user._id))
-      return res.status(400).json({ message: "Unable to follow own user" });
+      return res.status(400).json({ error: "Unable to follow own user" });
     if (!userToFollow || !currentUser)
-      return res.status(400).json({ message: "User not found" });
+      return res.status(400).json({ error: "User not found" });
     const isFollowing = currentUser.following.includes(id);
     if (isFollowing) {
       await User.findByIdAndUpdate(req.user._id, { $pull: { following: id } });
@@ -101,10 +101,10 @@ export const updateUser = async (req, res) => {
     const userId = req.user._id;
 
     if (id !== String(userId))
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ error: "Unauthorized" });
 
     let user = await User.findById(userId);
-    if (!user) return res.status(400).json({ message: "User not found" });
+    if (!user) return res.status(400).json({ error: "User not found" });
 
     if (password) {
       const salt = await bcrypt.genSalt(12);
@@ -132,7 +132,7 @@ export const getUserProfile = async (req, res) => {
     const user = await User.findOne({ username })
       .select("-password")
       .select("-updatedAt");
-    if (!user) return res.status(400).json({ message: "User not found" });
+    if (!user) return res.status(400).json({ error: "User not found" });
     return res.status(200).json(user);
   } catch (error) {
     errorHandler(error, res);

@@ -17,6 +17,7 @@ import {
   Text,
   useColorModeValue,
   Link,
+  useToast,
 } from "@chakra-ui/react";
 
 const SignupCard = () => {
@@ -29,9 +30,34 @@ const SignupCard = () => {
     password: "",
   }));
 
-  const handleSignup = (e) => {
-    //TODO
-    e.preventDefault();
+  const toast = useToast();
+
+  const handleSignup = async () => {
+    try {
+      const res = await fetch("/api/users/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(inputs),
+      });
+      const data = await res.json();
+
+      if (data.error) {
+        toast({
+          title: "Error",
+          description: data.error,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+
+      localStorage.setItem("user-twine", JSON.stringify(data));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
