@@ -1,10 +1,11 @@
 import SignupCard from "../components/SignupCard";
+import LoginCard from "../components/LoginCard";
 
 const AuthPage = () => {
   return (
     <>
-      AuthPage
       <SignupCard />
+      <LoginCard />
     </>
   );
 };

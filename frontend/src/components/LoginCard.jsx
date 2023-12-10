@@ -8,7 +8,6 @@ import {
   Input,
   InputGroup,
   Stack,
-  HStack,
   InputRightElement,
   Button,
   Heading,
@@ -21,8 +20,6 @@ const LoginCard = () => {
   const [authScreen, setAuthScreen] = useState("TODO");
   const [showPassword, setShowPassword] = useState(false);
   const [inputs, setInputs] = useState({
-    name: "",
-    username: "",
     email: "",
     password: "",
   });
@@ -38,7 +35,7 @@ const LoginCard = () => {
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
-            Sign up
+            Login
           </Heading>
         </Stack>
         <Box
@@ -46,42 +43,17 @@ const LoginCard = () => {
           bg={useColorModeValue("white", "gray.dark")}
           boxShadow={"lg"}
           p={8}
+          w={{ base: "full", sm: "400px" }}
         >
           <Stack spacing={4}>
-            <HStack>
-              <Box>
-                <FormControl isRequired>
-                  <FormLabel>Full name</FormLabel>
-                  <Input
-                    type="text"
-                    onChange={(e) =>
-                      setInputs({ ...inputs, name: e.target.value })
-                    }
-                    value={inputs.name}
-                  />
-                </FormControl>
-              </Box>
-              <Box>
-                <FormControl isRequired>
-                  <FormLabel>Username</FormLabel>
-                  <Input
-                    type="text"
-                    onChange={(e) =>
-                      setInputs({ ...inputs, username: e.target.value })
-                    }
-                    value={inputs.username}
-                  />
-                </FormControl>
-              </Box>
-            </HStack>
             <FormControl isRequired>
-              <FormLabel>Email address</FormLabel>
+              <FormLabel>Username</FormLabel>
               <Input
-                type="email"
+                type="text"
                 onChange={(e) =>
-                  setInputs({ ...inputs, email: e.target.value })
+                  setInputs({ ...inputs, username: e.target.value })
                 }
-                value={inputs.email}
+                value={inputs.username}
               />
             </FormControl>
             <FormControl isRequired>
@@ -128,12 +100,12 @@ const LoginCard = () => {
             </Stack>
             <Stack pt={6}>
               <Text align={"center"}>
-                Not a user?{" "}
+                Don&apos;t have an account?{" "}
                 <Link
                   color={"blue.400"}
                   onClick={() => setAuthScreen("signup")}
                 >
-                  Signup
+                  Sign up
                 </Link>
               </Text>
             </Stack>
