@@ -1,12 +1,12 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Container } from "@chakra-ui/react";
+import { useRecoilValue } from "recoil";
+import userAtom from "./atoms/userAtom";
 import Header from "./components/Header";
 import HomePage from "./pages/HomePage";
 import UserPage from "./pages/UserPage";
 import PostPage from "./pages/PostPage";
 import AuthPage from "./pages/AuthPage";
-import { useRecoilValue } from "recoil";
-import userAtom from "./atoms/userAtom";
 import LogoutButton from "./components/LogoutButton";
 
 function App() {

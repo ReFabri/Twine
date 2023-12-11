@@ -22,7 +22,6 @@ const LogoutButton = () => {
         showToast("Error", data.error, "error");
         return;
       }
-
       localStorage.removeItem("user-twine");
       setUser(null);
     } catch (error) {

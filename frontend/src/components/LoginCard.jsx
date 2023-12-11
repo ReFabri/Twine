@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BiSolidShow, BiSolidHide } from "react-icons/bi";
 import { useSetRecoilState } from "recoil";
+import useShowToast from "../hooks/useShowToast";
 import authScreenAtom from "../atoms/authAtom";
 import {
   Flex,
@@ -17,20 +18,41 @@ import {
   useColorModeValue,
   Link,
 } from "@chakra-ui/react";
+import userAtom from "../atoms/userAtom";
 
 const LoginCard = () => {
   const setAuthScreen = useSetRecoilState(authScreenAtom);
+  const setUser = useSetRecoilState(userAtom);
+  const showToast = useShowToast();
   const [showPassword, setShowPassword] = useState(false);
-  const [inputs, setInputs] = useState(() => ({
-    name: "",
+  const [loading, setLoading] = useState(false);
+  const [inputs, setInputs] = useState({
     username: "",
-    email: "",
     password: "",
-  }));
+  });
 
-  const handleLogin = (e) => {
-    //TODO
-    e.preventDefault();
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(inputs),
+      });
+      const data = await res.json();
+      if (data.error) {
+        showToast("Error", data.error, "error");
+        return;
+      }
+      localStorage.setItem("user-twine", JSON.stringify(data));
+      setUser(data);
+    } catch (error) {
+      showToast("Error", error, "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -95,7 +117,7 @@ const LoginCard = () => {
             </FormControl>
             <Stack spacing={10} pt={2}>
               <Button
-                loadingText="Submitting"
+                loadingText="Logging in"
                 size="lg"
                 bg={useColorModeValue("gray.600", "gray.700")}
                 color={"white"}
@@ -103,8 +125,9 @@ const LoginCard = () => {
                   bg: useColorModeValue("gray.700", "gray.800"),
                 }}
                 onClick={handleLogin}
+                isLoading={loading}
               >
-                Sign up
+                Login
               </Button>
             </Stack>
             <Stack pt={6}>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BiSolidShow, BiSolidHide } from "react-icons/bi";
 import { useSetRecoilState } from "recoil";
-import { useShowToast } from "../hooks/useShowToast";
+import useShowToast from "../hooks/useShowToast";
 import authScreenAtom from "../atoms/authAtom";
 import {
   Flex,
@@ -19,17 +19,18 @@ import {
   useColorModeValue,
   Link,
 } from "@chakra-ui/react";
+import userAtom from "../atoms/userAtom";
 
 const SignupCard = () => {
   const setAuthScreen = useSetRecoilState(authScreenAtom);
   const [showPassword, setShowPassword] = useState(false);
-  const [inputs, setInputs] = useState(() => ({
+  const [inputs, setInputs] = useState({
     name: "",
     username: "",
     email: "",
     password: "",
-  }));
-
+  });
+  const setUser = useSetRecoilState(userAtom);
   const showToast = useShowToast();
 
   const handleSignup = async () => {
@@ -42,19 +43,14 @@ const SignupCard = () => {
         body: JSON.stringify(inputs),
       });
       const data = await res.json();
-
       if (data.error) {
-        showToast({
-          title: "Error",
-          description: data.error,
-          status: "error",
-        });
+        showToast("Error", data.error, "error");
         return;
       }
-
       localStorage.setItem("user-twine", JSON.stringify(data));
+      setUser(data);
     } catch (error) {
-      console.log(error);
+      showToast("Error", error, "error");
     }
   };
 
