@@ -35,6 +35,23 @@ const SignupCard = () => {
 
   const handleSignup = async () => {
     try {
+      if (
+        !inputs.name.trim() ||
+        !inputs.username.trim() ||
+        !inputs.email.trim() ||
+        !inputs.password.trim()
+      ) {
+        showToast("Error", "All fields are required", "error");
+        return;
+      }
+      if (inputs.password.length < 6) {
+        showToast(
+          "Error",
+          "Password must be at least 6 characters long",
+          "error"
+        );
+        return;
+      }
       const res = await fetch("/api/users/signup", {
         method: "POST",
         headers: {
@@ -49,6 +66,7 @@ const SignupCard = () => {
       }
       localStorage.setItem("user-twine", JSON.stringify(data));
       setUser(data);
+      showToast("Success", "User created successfully", "success");
     } catch (error) {
       showToast("Error", error, "error");
     }

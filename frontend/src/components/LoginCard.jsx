@@ -33,6 +33,18 @@ const LoginCard = () => {
 
   const handleLogin = async () => {
     try {
+      if (!inputs.username.trim() || !inputs.password.trim()) {
+        showToast("Error", "All fields are required", "error");
+        return;
+      }
+      if (inputs.password.length < 6) {
+        showToast(
+          "Error",
+          "Password must be at least 6 characters long",
+          "error"
+        );
+        return;
+      }
       setLoading(true);
       const res = await fetch("/api/users/login", {
         method: "POST",
@@ -48,6 +60,7 @@ const LoginCard = () => {
       }
       localStorage.setItem("user-twine", JSON.stringify(data));
       setUser(data);
+      showToast("Success", "Login successful", "success");
     } catch (error) {
       showToast("Error", error, "error");
     } finally {
