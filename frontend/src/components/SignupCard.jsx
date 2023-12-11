@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { BiSolidShow, BiSolidHide } from "react-icons/bi";
 import { useSetRecoilState } from "recoil";
+import { useShowToast } from "../hooks/useShowToast";
 import authScreenAtom from "../atoms/authAtom";
 import {
   Flex,
@@ -17,7 +18,6 @@ import {
   Text,
   useColorModeValue,
   Link,
-  useToast,
 } from "@chakra-ui/react";
 
 const SignupCard = () => {
@@ -30,7 +30,7 @@ const SignupCard = () => {
     password: "",
   }));
 
-  const toast = useToast();
+  const showToast = useShowToast();
 
   const handleSignup = async () => {
     try {
@@ -44,12 +44,10 @@ const SignupCard = () => {
       const data = await res.json();
 
       if (data.error) {
-        toast({
+        showToast({
           title: "Error",
           description: data.error,
           status: "error",
-          duration: 3000,
-          isClosable: true,
         });
         return;
       }
