@@ -55,11 +55,11 @@ export const deletePost = async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     if (!post) {
-      return res.status(404).json({ message: "Post not found" });
+      return res.status(404).json({ error: "Post not found" });
     }
 
     if (String(post.postedBy) !== String(req.user._id)) {
-      return res.status(401).json({ message: "Unauthorized to delete post" });
+      return res.status(401).json({ error: "Unauthorized to delete post" });
     }
 
     await Post.findByIdAndDelete(req.params.id);
@@ -77,7 +77,7 @@ export const likeUnlikePost = async (req, res) => {
 
     const post = await Post.findById(postId);
 
-    if (!post) return res.status(404).json({ message: "Post not found" });
+    if (!post) return res.status(404).json({ error: "Post not found" });
 
     const isPostLiked = post.likes.includes(userId);
 
@@ -102,10 +102,10 @@ export const replyToPost = async (req, res) => {
     const { text } = req.body;
 
     if (!text?.trim())
-      return res.status(400).json({ message: "Reply text is required" });
+      return res.status(400).json({ error: "Reply text is required" });
 
     const post = await Post.findById(postId);
-    if (!post) return res.status(404).json({ message: "Post not found" });
+    if (!post) return res.status(404).json({ error: "Post not found" });
 
     const reply = { userId, text, userProfilePic, username };
     post.replies.push(reply);
@@ -123,7 +123,7 @@ export const getFeedPosts = async (req, res) => {
   try {
     const { _id: userId } = req.user;
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) return res.status(404).json({ error: "User not found" });
 
     const following = user.following;
     const feedPosts = await Post.find({ postedBy: { $in: following } }).sort({
