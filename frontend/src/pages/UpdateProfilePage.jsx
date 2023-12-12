@@ -44,7 +44,7 @@ const UpdateProfilePage = () => {
         },
         body: JSON.stringify({ ...inputs, profilePic: imgUrl }),
       });
-      const data = await res.json(); // updated user object
+      const data = await res.json();
       if (data.error) {
         showToast("Error", data.error, "error");
         return;
@@ -70,12 +70,8 @@ const UpdateProfilePage = () => {
           boxShadow={"lg"}
           p={6}
         >
-          <Heading
-            py={3}
-            lineHeight={1.1}
-            fontSize={{ base: "2xl", sm: "3xl" }}
-          >
-            User Profile Edit
+          <Heading p={3} lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
+            Edit Profile
           </Heading>
           <FormControl id="userName">
             <Stack direction={["column", "row"]} spacing={6}>
@@ -102,7 +98,7 @@ const UpdateProfilePage = () => {
           <FormControl>
             <FormLabel>Full name</FormLabel>
             <Input
-              placeholder="John Doe"
+              placeholder={user.name}
               value={inputs.name}
               onChange={(e) => setInputs({ ...inputs, name: e.target.value })}
               _placeholder={{ color: "gray.500" }}
@@ -112,7 +108,7 @@ const UpdateProfilePage = () => {
           <FormControl>
             <FormLabel>User name</FormLabel>
             <Input
-              placeholder="johndoe"
+              placeholder={user.username}
               value={inputs.username}
               onChange={(e) =>
                 setInputs({ ...inputs, username: e.target.value })
@@ -124,7 +120,7 @@ const UpdateProfilePage = () => {
           <FormControl>
             <FormLabel>Email address</FormLabel>
             <Input
-              placeholder="your-email@example.com"
+              placeholder={user.email}
               value={inputs.email}
               onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
               _placeholder={{ color: "gray.500" }}
@@ -134,7 +130,7 @@ const UpdateProfilePage = () => {
           <FormControl>
             <FormLabel>Bio</FormLabel>
             <Input
-              placeholder="Your bio."
+              placeholder={user.bio}
               value={inputs.bio}
               onChange={(e) => setInputs({ ...inputs, bio: e.target.value })}
               _placeholder={{ color: "gray.500" }}
@@ -153,7 +149,7 @@ const UpdateProfilePage = () => {
               type="password"
             />
           </FormControl>
-          <Stack spacing={6} direction={["column", "row"]}>
+          <Stack pt={6} spacing={6} direction={["column", "row"]}>
             <Button
               bg={"red.400"}
               color={"white"}

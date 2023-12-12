@@ -36,7 +36,7 @@ const LogoutButton = () => {
       size={"sm"}
       onClick={handleLogout}
     >
-      <HiOutlineLogout size={20} />
+      <HiOutlineLogout size={15} />
     </Button>
   );
 };
