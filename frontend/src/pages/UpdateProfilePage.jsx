@@ -70,7 +70,11 @@ const UpdateProfilePage = () => {
           boxShadow={"lg"}
           p={6}
         >
-          <Heading lineHeight={1.1} fontSize={{ base: "2xl", sm: "3xl" }}>
+          <Heading
+            py={3}
+            lineHeight={1.1}
+            fontSize={{ base: "2xl", sm: "3xl" }}
+          >
             User Profile Edit
           </Heading>
           <FormControl id="userName">
