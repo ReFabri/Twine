@@ -14,6 +14,7 @@ import {
   useColorModeValue,
   Avatar,
   Center,
+  Textarea,
 } from "@chakra-ui/react";
 
 const UpdateProfilePage = () => {
@@ -129,7 +130,7 @@ const UpdateProfilePage = () => {
           </FormControl>
           <FormControl>
             <FormLabel>Bio</FormLabel>
-            <Input
+            <Textarea
               placeholder={user.bio}
               value={inputs.bio}
               onChange={(e) => setInputs({ ...inputs, bio: e.target.value })}
