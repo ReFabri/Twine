@@ -24,6 +24,7 @@ import userAtom from "../atoms/userAtom";
 const SignupCard = () => {
   const setAuthScreen = useSetRecoilState(authScreenAtom);
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [inputs, setInputs] = useState({
     name: "",
     username: "",
@@ -35,6 +36,7 @@ const SignupCard = () => {
 
   const handleSignup = async () => {
     try {
+      setLoading(true);
       if (
         !inputs.name.trim() ||
         !inputs.username.trim() ||
@@ -69,6 +71,8 @@ const SignupCard = () => {
       showToast("Success", "User created successfully", "success");
     } catch (error) {
       showToast("Error", error, "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -164,6 +168,7 @@ const SignupCard = () => {
                   bg: useColorModeValue("gray.700", "gray.800"),
                 }}
                 onClick={handleSignup}
+                isLoading={loading}
               >
                 Sign up
               </Button>

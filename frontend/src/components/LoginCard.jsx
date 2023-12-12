@@ -33,6 +33,7 @@ const LoginCard = () => {
 
   const handleLogin = async () => {
     try {
+      setLoading(true);
       if (!inputs.username.trim() || !inputs.password.trim()) {
         showToast("Error", "All fields are required", "error");
         return;
@@ -45,7 +46,6 @@ const LoginCard = () => {
         );
         return;
       }
-      setLoading(true);
       const res = await fetch("/api/users/login", {
         method: "POST",
         headers: {
