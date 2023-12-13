@@ -104,7 +104,7 @@ export const updateUser = async (req, res) => {
     if (id !== String(userId))
       return res.status(401).json({ error: "Unauthorized" });
 
-    let user = await User.findById(userId);
+    let user = await User.findById(userId).select("-password");
     if (!user) return res.status(400).json({ error: "User not found" });
 
     if (password) {

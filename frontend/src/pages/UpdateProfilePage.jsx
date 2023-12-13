@@ -148,7 +148,7 @@ const UpdateProfilePage = () => {
               type="text"
             />
           </FormControl>
-          <FormControl isRequired>
+          <FormControl>
             <FormLabel>Password</FormLabel>
             <InputGroup>
               <Input
