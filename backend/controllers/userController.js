@@ -104,7 +104,7 @@ export const updateUser = async (req, res) => {
     if (id !== String(userId))
       return res.status(401).json({ error: "Unauthorized" });
 
-    let user = await User.findById(userId).select("-password");
+    let user = await User.findById(userId);
     if (!user) return res.status(400).json({ error: "User not found" });
 
     if (password) {
@@ -121,7 +121,19 @@ export const updateUser = async (req, res) => {
 
     user = await user.save();
 
-    return res.status(200).json({ message: "User profile updated", user });
+    const resUserData = {
+      _id: user._id,
+      name: name || user.name,
+      username: username || user.username,
+      email: email || user.email,
+      profilePic: profilePic || user.profilePic,
+      bio: bio || user.bio,
+      profilePic: user.profilePic,
+    };
+
+    return res
+      .status(200)
+      .json({ message: "User profile updated", user: resUserData });
   } catch (error) {
     errorHandler(error, res);
   }
