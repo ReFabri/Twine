@@ -56,7 +56,7 @@ const UpdateProfilePage = () => {
       }
       showToast("Success", "Profile updated successfully", "success");
       setUser(data);
-      localStorage.setItem("user-twine", JSON.stringify(data));
+      localStorage.setItem("user-twine", JSON.stringify(data.user));
     } catch (error) {
       showToast("Error", error, "error");
     } finally {
