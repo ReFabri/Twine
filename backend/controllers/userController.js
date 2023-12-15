@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import generateToken from "../utils/helpers/generateToken.js";
 import errorHandler from "../utils/helpers/errorHandler.js";
 import User from "../models/userModel.js";
+import { v2 as cloudinary } from "cloudinary";
 
 export const signupUser = async (req, res) => {
   try {
@@ -97,7 +98,8 @@ export const followUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-    const { name, username, email, password, profilePic, bio } = req.body;
+    const { name, username, email, password, bio } = req.body;
+    let { profilePic } = req.body;
     const { id } = req.params;
     const userId = req.user._id;
 
@@ -113,11 +115,18 @@ export const updateUser = async (req, res) => {
       user.password = hashedPassword;
     }
 
+    if (profilePic) {
+      const cloudinaryRes = await cloudinary.uploader.upload(profilePic, {
+        folder: "Twine",
+      });
+      profilePic = cloudinaryRes.secure_url;
+    }
+
     user.name = name || user.name;
     user.username = username || user.username;
     user.email = email || user.email;
-    user.profilePic = profilePic || user.profilePic;
     user.bio = bio || user.bio;
+    user.profilePic = profilePic || user.profilePic;
 
     user = await user.save();
 
@@ -128,7 +137,6 @@ export const updateUser = async (req, res) => {
       email: email || user.email,
       profilePic: profilePic || user.profilePic,
       bio: bio || user.bio,
-      profilePic: user.profilePic,
     };
 
     return res
