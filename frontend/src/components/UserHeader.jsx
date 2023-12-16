@@ -19,10 +19,14 @@ import PropTypes from "prop-types";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { Link as RouterLink } from "react-router-dom";
+import { useState } from "react";
 
 const UserHeader = ({ user }) => {
   const toast = useToast();
   const currentUser = useRecoilValue(userAtom);
+  const [following, setFollowing] = useState(
+    user.followers.includes(currentUser._id)
+  );
 
   const copyURL = () => {
     const currentURL = window.location.href;
@@ -34,6 +38,11 @@ const UserHeader = ({ user }) => {
         status: "success",
       });
     });
+  };
+
+  const handleFollow = () => {
+    //TODO
+    setFollowing(null);
   };
 
   return (
@@ -77,7 +86,11 @@ const UserHeader = ({ user }) => {
           <Button size={"sm"}>Update Profile</Button>
         </Link>
       )}
-      {currentUser._id !== user._id && <Button size={"sm"}>Follow</Button>}
+      {currentUser._id !== user._id && (
+        <Button onClick={handleFollow} size={"sm"}>
+          {following ? "Unfollow" : "Follow"}
+        </Button>
+      )}
 
       <Flex w={"full"} justifyContent={"space-between"}>
         <Flex gap={2} alignItems={"center"}>
