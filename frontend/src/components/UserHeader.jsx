@@ -14,8 +14,9 @@ import {
 } from "@chakra-ui/react";
 import { BsInstagram } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
+import PropTypes from "prop-types";
 
-const UserHeader = () => {
+const UserHeader = ({ user }) => {
   const toast = useToast();
 
   const copyURL = () => {
@@ -35,10 +36,10 @@ const UserHeader = () => {
       <Flex justifyContent={"space-between"} width={"full"}>
         <Box>
           <Text fontSize={"2xl"} fontWeight={"bold"}>
-            Dude Realperson
+            {user.name}
           </Text>
           <Flex gap={2} alignItems={"center"}>
-            <Text fontSize={"xs"}>realdude</Text>
+            <Text fontSize={"xs"}>{user.username}</Text>
             <Text
               fontSize={"xs"}
               bg={"gray.dark"}
@@ -52,20 +53,22 @@ const UserHeader = () => {
           </Flex>
         </Box>
         <Box>
-          <Avatar
-            name="Dude Realperson"
-            src="/avatar.jpg"
-            size={{ base: "md", md: "xl" }}
-          />
+          {user.profilePic && (
+            <Avatar
+              name={user.name}
+              src={user.profilePic}
+              size={{ base: "md", md: "xl" }}
+            />
+          )}
+          {!user.profilePic && (
+            <Avatar name={user.name} src="" size={{ base: "md", md: "xl" }} />
+          )}
         </Box>
       </Flex>
-      <Text>
-        Executive chairman and CEO of a real monolith company that really exists
-        for real.
-      </Text>
+      <Text>{user.bio}</Text>
       <Flex w={"full"} justifyContent={"space-between"}>
         <Flex gap={2} alignItems={"center"}>
-          <Text color={"gray.light"}>3.2K followers</Text>
+          <Text color={"gray.light"}>{user.followers.length} followers</Text>
           <Box w={1} h={1} bg={"gray.light"} borderRadius={"full"}></Box>
           <Link color={"gray.light"}>instagram.com</Link>
         </Flex>
@@ -112,6 +115,10 @@ const UserHeader = () => {
       </Flex>
     </VStack>
   );
+};
+
+UserHeader.propTypes = {
+  user: PropTypes.object,
 };
 
 export default UserHeader;
