@@ -20,9 +20,11 @@ import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { Link as RouterLink } from "react-router-dom";
 import { useState } from "react";
+import useShowToast from "../hooks/useShowToast";
 
 const UserHeader = ({ user }) => {
   const toast = useToast();
+  const showToast = useShowToast();
   const currentUser = useRecoilValue(userAtom);
   const [following, setFollowing] = useState(
     user.followers.includes(currentUser._id)
@@ -40,9 +42,23 @@ const UserHeader = ({ user }) => {
     });
   };
 
-  const handleFollow = () => {
-    //TODO
-    setFollowing(null);
+  const handleFollow = async () => {
+    try {
+      const res = await fetch(`/api/users/follow/${user._id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (data.error) {
+        showToast("Error", data.error, "error");
+        return;
+      }
+      setFollowing(!following);
+    } catch (error) {
+      showToast("Error", error, "error");
+    }
   };
 
   return (
