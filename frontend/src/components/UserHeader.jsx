@@ -55,6 +55,16 @@ const UserHeader = ({ user }) => {
         showToast("Error", data.error, "error");
         return;
       }
+
+      if (following) {
+        showToast("Success", `Unfollowed ${user.name}`, "success");
+        user.followers = user.followers.filter(
+          (followerId) => followerId !== currentUser._id
+        );
+      } else {
+        showToast("Success", `Following ${user.name}`, "success");
+        user.followers.push(currentUser._id);
+      }
       setFollowing(!following);
     } catch (error) {
       showToast("Error", error, "error");
