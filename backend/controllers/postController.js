@@ -1,6 +1,7 @@
 import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 import errorHandler from "../utils/helpers/errorHandler.js";
+import { v2 as cloudinary } from "cloudinary";
 
 export const createPost = async (req, res) => {
   try {
@@ -10,20 +11,25 @@ export const createPost = async (req, res) => {
     if (!postedBy || !text)
       return res
         .status(400)
-        .json({ message: "Text and User fields are required" });
+        .json({ error: "Text and User fields are required" });
 
     const user = await User.findById(postedBy);
 
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) return res.status(404).json({ error: "User not found" });
 
     if (String(user._id) !== String(req.user._id))
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ error: "Unauthorized" });
 
     const maxLength = 500;
     if (text.length > maxLength)
       return res
         .status(400)
-        .json({ message: `Post exceeds ${maxLength} characters` });
+        .json({ error: `Post exceeds ${maxLength} characters` });
+
+    if (img) {
+      const uploadedResponse = await cloudinary.uploader.upload(img);
+      img = uploadedResponse.secure_url;
+    }
 
     const newPost = new Post({ postedBy, text, img });
     await newPost.save();
