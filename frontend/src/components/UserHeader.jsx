@@ -49,13 +49,18 @@ const UserHeader = ({ user }) => {
         showToast("Error", "Please login to follow", "error");
         return;
       }
+
+      if (updating) return;
+
       setUpdating(true);
+
       const res = await fetch(`/api/users/follow/${user._id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
+
       const data = await res.json();
       if (data.error) {
         showToast("Error", data.error, "error");
@@ -71,6 +76,7 @@ const UserHeader = ({ user }) => {
         showToast("Success", `Following ${user.name}`, "success");
         user.followers.push(currentUser._id);
       }
+
       setFollowing(!following);
     } catch (error) {
       showToast("Error", error, "error");
