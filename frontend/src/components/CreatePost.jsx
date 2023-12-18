@@ -34,6 +34,7 @@ const CreatePost = () => {
   const [remainingChar, setRemainingChar] = useState(500);
   const user = useRecoilValue(userAtom);
   const showToast = useShowToast();
+  const [loading, setLoading] = useState(false);
 
   const handleTextChange = (e) => {
     const inputText = e.target.value;
@@ -48,24 +49,35 @@ const CreatePost = () => {
   };
 
   const handleCreatePost = async () => {
-    const res = await fetch("/api/posts/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        postedBy: user._id,
-        text: postText,
-        img: imgUrl,
-      }),
-    });
-    const data = await res.json();
-    if (data.error) {
-      showToast("Error", data.error, "error");
-      return;
+    try {
+      if (loading) return;
+      setLoading(true);
+
+      const res = await fetch("/api/posts/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          postedBy: user._id,
+          text: postText,
+          img: imgUrl,
+        }),
+      });
+      const data = await res.json();
+      if (data.error) {
+        showToast("Error", data.error, "error");
+        return;
+      }
+      showToast("Success", "Post created successfully", "success");
+      onClose();
+      setPostText("");
+      setImgUrl("");
+    } catch (error) {
+      showToast("Error", error, "error");
+    } finally {
+      setLoading(false);
     }
-    showToast("Success", "Post created successfully", "success");
-    onClose();
   };
 
   return (
@@ -127,7 +139,12 @@ const CreatePost = () => {
             )}
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleCreatePost}>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={handleCreatePost}
+              isLoading={loading}
+            >
               Post
             </Button>
           </ModalFooter>
