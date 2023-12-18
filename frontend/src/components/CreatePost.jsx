@@ -21,6 +21,9 @@ import {
 import { FaPlus } from "react-icons/fa6";
 import usePreviewImg from "../hooks/usePreviewImg";
 import { BsFillImageFill } from "react-icons/bs";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
+import useShowToast from "../hooks/useShowToast";
 
 const CreatePost = () => {
   const MAX_CHAR = 500;
@@ -29,6 +32,8 @@ const CreatePost = () => {
   const imageRef = useRef();
   const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
   const [remainingChar, setRemainingChar] = useState(500);
+  const user = useRecoilValue(userAtom);
+  const showToast = useShowToast();
 
   const handleTextChange = (e) => {
     const inputText = e.target.value;
@@ -42,7 +47,26 @@ const CreatePost = () => {
     }
   };
 
-  const handleCreatePost = async () => {};
+  const handleCreatePost = async () => {
+    const res = await fetch("/api/posts/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        postedBy: user._id,
+        text: postText,
+        img: imgUrl,
+      }),
+    });
+    const data = await res.json();
+    if (data.error) {
+      showToast("Error", data.error, "error");
+      return;
+    }
+    showToast("Success", "Post created successfully", "success");
+    onClose();
+  };
 
   return (
     <>

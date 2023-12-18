@@ -122,7 +122,7 @@ export const updateUser = async (req, res) => {
         );
       }
       const cloudinaryRes = await cloudinary.uploader.upload(profilePic, {
-        folder: "Twine",
+        folder: "Twine/users",
       });
       profilePic = cloudinaryRes.secure_url;
     }

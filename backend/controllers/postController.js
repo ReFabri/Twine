@@ -27,7 +27,9 @@ export const createPost = async (req, res) => {
         .json({ error: `Post exceeds ${maxLength} characters` });
 
     if (img) {
-      const uploadedResponse = await cloudinary.uploader.upload(img);
+      const uploadedResponse = await cloudinary.uploader.upload(img, {
+        folder: "Twine/posts",
+      });
       img = uploadedResponse.secure_url;
     }
 
