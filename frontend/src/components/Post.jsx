@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { BiSolidTrash } from "react-icons/bi";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { FaChevronDown } from "react-icons/fa";
 import Actions from "./Actions";
 import useShowToast from "../hooks/useShowToast";
 import PropTypes from "prop-types";
@@ -74,7 +75,11 @@ const Post = ({ post, postedBy }) => {
           />
           <Box w="1px" h={"full"} bg="gray.light" my={2}></Box>
           <Box position={"relative"} w={"full"}>
-            {post.replies.length === 0 && <Text textAlign={"center"}>🥱</Text>}
+            {post.replies.length === 0 && (
+              <Flex justifyContent={"center"}>
+                <FaChevronDown />
+              </Flex>
+            )}
             {post.replies[0] && (
               <Avatar
                 size="xs"
