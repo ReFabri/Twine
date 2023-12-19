@@ -3,6 +3,7 @@ import generateToken from "../utils/helpers/generateToken.js";
 import errorHandler from "../utils/helpers/errorHandler.js";
 import User from "../models/userModel.js";
 import { v2 as cloudinary } from "cloudinary";
+import mongoose from "mongoose";
 
 export const signupUser = async (req, res) => {
   try {

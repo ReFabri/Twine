@@ -129,8 +129,8 @@ export const replyToPost = async (req, res) => {
 
 export const getFeedPosts = async (req, res) => {
   try {
-    const { _id: userId } = req.user;
-    const user = await User.findById(userId);
+    const { _id } = req.user;
+    const user = await User.findById(_id);
     if (!user) return res.status(404).json({ error: "User not found" });
 
     const following = user.following;

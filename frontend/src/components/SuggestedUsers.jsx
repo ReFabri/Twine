@@ -41,9 +41,9 @@ const SuggestedUsers = () => {
             <SuggestedUser key={user._id} user={user} />
           ))}
         {loading &&
-          [0, 1, 2, 3, 4].map((_, idx) => (
+          [0, 1, 2, 3, 4].map((_, index) => (
             <Flex
-              key={idx}
+              key={index}
               gap={2}
               alignItems={"center"}
               p={"1"}
