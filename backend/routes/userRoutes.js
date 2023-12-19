@@ -16,7 +16,7 @@ router.post("/signup", signupUser);
 router.post("/login", loginUser);
 router.get("/logout", logoutUser);
 router.get("/suggested", protectRoute, getSuggestedUsers);
-router.get("/profile/:username", getUserProfile);
+router.get("/profile/:query", getUserProfile);
 router.get("/follow/:id", protectRoute, followUser);
 router.put("/update/:id", protectRoute, updateUser);
 
