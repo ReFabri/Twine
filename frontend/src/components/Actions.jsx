@@ -25,8 +25,9 @@ const Actions = ({ post: post_ }) => {
   const user = useRecoilValue(userAtom);
   const [liked, setLiked] = useState(post_.likes.includes(user?._id));
   const [post, setPost] = useState(post_);
-  const [isLiking, setIsLiking] = useState(false);
   const [reply, setReply] = useState("");
+  const [isLiking, setIsLiking] = useState(false);
+  const [isReplying, setIsReplying] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleLike = async () => {
@@ -63,6 +64,34 @@ const Actions = ({ post: post_ }) => {
       showToast("Error", error.message, "error");
     } finally {
       setIsLiking(false);
+    }
+  };
+
+  const handleReply = async () => {
+    if (!user)
+      return showToast(
+        "Error",
+        "You must be logged in to reply to a post",
+        "error"
+      );
+    if (isReplying) return;
+    setIsReplying(true);
+    try {
+      const res = await fetch(`/api/posts/reply/${post._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: reply }),
+      });
+      const data = await res.json();
+      if (data.error) return showToast("Error", data.error, "error");
+      setPost((prev) => ({ ...prev, replies: [...prev.replies, data.reply] }));
+      showToast("Success", "Reply posted successfully", "success");
+    } catch (error) {
+      showToast("Error", error.message, "error");
+    } finally {
+      setIsReplying(false);
     }
   };
 
@@ -137,7 +166,12 @@ const Actions = ({ post: post_ }) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3}>
+            <Button
+              onClick={handleReply}
+              colorScheme="blue"
+              mr={3}
+              isLoading={isReplying}
+            >
               Reply
             </Button>
           </ModalFooter>
