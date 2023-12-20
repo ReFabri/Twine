@@ -5,7 +5,6 @@ import {
   Button,
   Flex,
   FormControl,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -27,6 +26,7 @@ const Actions = ({ post: post_ }) => {
   const [liked, setLiked] = useState(post_.likes.includes(user?._id));
   const [post, setPost] = useState(post_);
   const [isLiking, setIsLiking] = useState(false);
+  const [reply, setReply] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleLike = async () => {
@@ -125,10 +125,14 @@ const Actions = ({ post: post_ }) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Reply to Post</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton size={"sm"} />
           <ModalBody pb={6}>
             <FormControl>
-              <Textarea placeholder="Reply to post" />
+              <Textarea
+                placeholder="Reply to post"
+                value={reply}
+                onChange={(e) => setReply(e.target.value)}
+              />
             </FormControl>
           </ModalBody>
 
