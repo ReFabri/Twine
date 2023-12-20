@@ -88,6 +88,7 @@ const Actions = ({ post: post_ }) => {
       if (data.error) return showToast("Error", data.error, "error");
       setPost((prev) => ({ ...prev, replies: [...prev.replies, data.reply] }));
       showToast("Success", "Reply posted successfully", "success");
+      onClose();
     } catch (error) {
       showToast("Error", error.message, "error");
     } finally {
