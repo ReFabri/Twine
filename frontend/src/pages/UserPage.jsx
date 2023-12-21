@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Flex, Spinner } from "@chakra-ui/react";
+import { Flex, Spinner, Text } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import Post from "../components/Post";
 import useShowToast from "../hooks/useShowToast";
@@ -63,9 +63,13 @@ const UserPage = () => {
           <Spinner size={"xl"} />
         </Flex>
       )}
-      {!fetchingPosts && !posts.length && <h1>No posts created yet..</h1>}
+      {!fetchingPosts && !posts.length && (
+        <Text my={12} fontSize={20} textAlign={"center"}>
+          No posts created yet..
+        </Text>
+      )}
       {!fetchingPosts &&
-        posts.length &&
+        posts.length > 0 &&
         posts.map((post) => {
           return <Post key={post._id} post={post} postedBy={post.postedBy} />;
         })}
