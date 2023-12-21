@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import { Flex, Spinner } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
+import Post from "../components/Post";
 import useShowToast from "../hooks/useShowToast";
 import UserHeader from "../components/UserHeader";
-import UserPost from "../components/UserPost";
-import { Flex, Spinner } from "@chakra-ui/react";
 
 const UserPage = () => {
   const showToast = useShowToast();
@@ -14,6 +14,7 @@ const UserPage = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
+        setLoading(true);
         const res = await fetch(`/api/users/profile/${username}`);
         const data = await res.json();
         if (data.error) {
@@ -27,6 +28,16 @@ const UserPage = () => {
         setLoading(false);
       }
     };
+
+    const getPosts = async () => {
+      try {
+        setLoading(true);
+      } catch (error) {
+      } finally {
+        setLoading(false);
+      }
+    };
+    getPosts();
     getUser();
   }, [username, showToast]);
 
@@ -42,31 +53,6 @@ const UserPage = () => {
   return (
     <>
       <UserHeader user={user} />
-      <UserPost likes={475} replies={264} postTitle="First post!" />
-      <UserPost
-        likes={475}
-        replies={264}
-        postImg="post1.jpg"
-        postTitle="Let's talk about twine!"
-      />
-      <UserPost
-        likes={35}
-        replies={46}
-        postImg="post2.jpg"
-        postTitle="Twine is awesome!"
-      />
-      <UserPost
-        likes={297}
-        replies={165}
-        postImg="post1.jpg"
-        postTitle="Twine is the best invention since sliced bread!"
-      />
-      <UserPost
-        likes={28}
-        replies={1262}
-        postImg="post2.jpg"
-        postTitle="Twine is very Twine!"
-      />
     </>
   );
 };
