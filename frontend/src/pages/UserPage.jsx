@@ -10,7 +10,7 @@ const UserPage = () => {
   const [user, setUser] = useState(null);
   const { username } = useParams();
   const [loading, setLoading] = useState(true);
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     const getUser = async () => {
@@ -21,7 +21,7 @@ const UserPage = () => {
         if (data.error) return showToast("Error", data.error, "error");
         setUser(data);
       } catch (error) {
-        showToast("Error", error, "error");
+        showToast("Error", error.message, "error");
       } finally {
         setLoading(false);
       }
@@ -30,19 +30,22 @@ const UserPage = () => {
     const getPosts = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`/api/posts/user/${user.username}`);
+        const res = await fetch(`/api/posts/user/${username}`);
         const data = await res.json();
         if (data.error) return showToast("Error", data.error, "error");
         setPosts(data);
       } catch (error) {
-        showToast("Error", error, "error");
+        showToast("Error", error.message, "error");
+        setPosts([]);
       } finally {
         setLoading(false);
       }
     };
-    getPosts();
     getUser();
-  }, [username, showToast, user.username]);
+    getPosts();
+  }, [username, showToast]);
+
+  console.log(posts);
 
   if (!user && loading) {
     return (
@@ -56,9 +59,9 @@ const UserPage = () => {
   return (
     <>
       <UserHeader user={user} />
-      {posts &&
+      {posts.length &&
         posts.map((post) => {
-          <Post post={post} />;
+          return <Post key={post._id} post={post} postedBy={post.postedBy} />;
         })}
     </>
   );
