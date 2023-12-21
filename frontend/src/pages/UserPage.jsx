@@ -11,6 +11,7 @@ const UserPage = () => {
   const { username } = useParams();
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
+  const [fetchingPosts, setFetchingPosts] = useState(true);
 
   useEffect(() => {
     const getUser = async () => {
@@ -29,7 +30,7 @@ const UserPage = () => {
 
     const getPosts = async () => {
       try {
-        setLoading(true);
+        setFetchingPosts(true);
         const res = await fetch(`/api/posts/user/${username}`);
         const data = await res.json();
         if (data.error) return showToast("Error", data.error, "error");
@@ -38,14 +39,12 @@ const UserPage = () => {
         showToast("Error", error.message, "error");
         setPosts([]);
       } finally {
-        setLoading(false);
+        setFetchingPosts(false);
       }
     };
     getUser();
     getPosts();
   }, [username, showToast]);
-
-  console.log(posts);
 
   if (!user && loading) {
     return (
@@ -59,7 +58,14 @@ const UserPage = () => {
   return (
     <>
       <UserHeader user={user} />
-      {posts.length &&
+      {fetchingPosts && (
+        <Flex justifyContent={"center"} my={12}>
+          <Spinner size={"xl"} />
+        </Flex>
+      )}
+      {!fetchingPosts && !posts.length && <h1>No posts created yet..</h1>}
+      {!fetchingPosts &&
+        posts.length &&
         posts.map((post) => {
           return <Post key={post._id} post={post} postedBy={post.postedBy} />;
         })}
