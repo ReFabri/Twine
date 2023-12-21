@@ -118,9 +118,8 @@ export const updateUser = async (req, res) => {
 
     if (profilePic) {
       if (user.profilePic) {
-        await cloudinary.uploader.destroy(
-          `Twine/${user.profilePic.split("/").pop().split(".")[0]}`
-        );
+        const profilePicId = user.profilePic.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(`Twine/users/${profilePicId}`);
       }
       const cloudinaryRes = await cloudinary.uploader.upload(profilePic, {
         folder: "Twine/users",
