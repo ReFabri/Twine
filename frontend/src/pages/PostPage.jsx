@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Flex,
   Avatar,
@@ -7,56 +7,103 @@ import {
   Box,
   Divider,
   Button,
+  Spinner,
 } from "@chakra-ui/react";
-import { BsThreeDots } from "react-icons/bs";
+import { BiSolidTrash } from "react-icons/bi";
 import Actions from "../components/Actions";
 import Comment from "../components/Comment";
+import useGetUserProfile from "../hooks/useGetUserProfile";
+import useShowToast from "../hooks/useShowToast";
+import { useParams } from "react-router-dom";
+import { formatDistanceToNow } from "date-fns";
+import { useRecoilValue } from "recoil";
+import userAtom from "../atoms/userAtom";
 
 const PostPage = () => {
-  const [liked, setLiked] = useState(false);
+  const showToast = useShowToast();
+  const { pid } = useParams();
+  const { user, loading } = useGetUserProfile();
+  const [post, setPost] = useState(null);
+  const currentUser = useRecoilValue(userAtom);
+
+  useEffect(() => {
+    const getPosts = async () => {
+      try {
+        const res = await fetch(`/api/posts/${pid}`);
+        const data = await res.json();
+        if (data.error) return showToast("Error", data.error, "error");
+        setPost(data);
+      } catch (error) {
+        showToast("Error", error.message, "error");
+      }
+    };
+    getPosts();
+  }, [pid, showToast]);
+
+  if (!user && loading) {
+    return (
+      <Flex justifyContent={"center"}>
+        <Spinner size={"xl"} />
+      </Flex>
+    );
+  }
+
+  if (!post) return null;
 
   return (
     <>
       <Flex>
         <Flex w={"full"} alignItems={"center"} gap={3}>
-          <Avatar src="/avatar.jpg" size={"md"} name="Dude Realperson" />
+          <Avatar src={user.profilePic} size={"md"} name={user.name} />
           <Flex>
             <Text fontSize={"sm"} fontWeight={"bold"}>
-              Dude Realperson
+              {user.username}
             </Text>
             <Image src="/verified.png" w={4} h={4} ml={4} />
           </Flex>
         </Flex>
         <Flex gap={4} alignItems={"center"}>
-          <Text fontSize={"sm"} color={"gray.light"}>
-            1d
+          <Text
+            fontSize={"xs"}
+            width={36}
+            textAlign={"right"}
+            color={"gray.light"}
+          >
+            {formatDistanceToNow(new Date(post.createdAt))} ago
           </Text>
-          <BsThreeDots />
+
+          {currentUser?._id === user._id && <BiSolidTrash size={20} />}
         </Flex>
       </Flex>
-      <Text my={3}>Let&apos;s Talk about Twine.</Text>
-      <Box
-        borderRadius={6}
-        overflow={"hidden"}
-        border={"1px solid"}
-        borderColor={"gray.light"}
-      >
-        <Image src={"/post1.jpg"} w={"full"} />
-      </Box>
+      <Text my={3}>{post.text}</Text>
+
+      {post.img && (
+        <Box
+          borderRadius={6}
+          overflow={"hidden"}
+          border={"1px solid"}
+          borderColor={"gray.light"}
+        >
+          <Image src={post.img} w={"full"} />
+        </Box>
+      )}
+
       <Flex gap={3} my={3}>
-        <Actions liked={liked} setLiked={setLiked} />
+        <Actions post={post} />
       </Flex>
 
       <Flex gap={2} alignItems={"center"}>
         <Text color={"gray.light"} fontSize={"sm"}>
-          238 replies
+          {post.replies.length} replies
         </Text>
         <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"}></Box>
         <Text color={"gray.light"} fontSize={"sm"}>
-          {200 + (liked ? 1 : 0)} likes
+          {post.likes.length} likes
         </Text>
       </Flex>
+
       <Divider my={4} />
+
       <Flex justifyContent={"space-between"}>
         <Flex gap={2} alignItems={"center"}>
           <Text fontSize={"2xl"}>👋</Text>
@@ -64,28 +111,19 @@ const PostPage = () => {
         </Flex>
         <Button>Get</Button>
       </Flex>
+
       <Divider my={4} />
-      <Comment
-        comment="Looks really good!"
-        createdAt="1d"
-        likes={220}
-        username="John Doe"
-        userAvatar="https://bit.ly/dan-abramov"
-      />
-      <Comment
-        comment="This is a great post"
-        createdAt="2d"
-        likes={138}
-        username="Doe John"
-        userAvatar="https://bit.ly/prosper-baba"
-      />
-      <Comment
-        comment="Excellent"
-        createdAt="2d"
-        likes={52}
-        username="Johnny Does"
-        userAvatar="https://bit.ly/kent-c-dodds"
-      />
+
+      {post.replies.length &&
+        post.replies.map((reply) => {
+          <Comment
+            comment={reply.text}
+            createdAt="1d"
+            likes={220}
+            username="John Doe"
+            userAvatar="https://bit.ly/dan-abramov"
+          />;
+        })}
     </>
   );
 };
