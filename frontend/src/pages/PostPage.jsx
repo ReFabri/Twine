@@ -40,6 +40,10 @@ const PostPage = () => {
     getPosts();
   }, [pid, showToast]);
 
+  const handleDeletePost = async () => {
+    //TODO
+  };
+
   if (!user && loading) {
     return (
       <Flex justifyContent={"center"}>
@@ -72,7 +76,13 @@ const PostPage = () => {
             {formatDistanceToNow(new Date(post.createdAt))} ago
           </Text>
 
-          {currentUser?._id === user._id && <BiSolidTrash size={20} />}
+          {currentUser?._id === user._id && (
+            <BiSolidTrash
+              size={20}
+              onClick={handleDeletePost}
+              cursor={"pointer"}
+            />
+          )}
         </Flex>
       </Flex>
       <Text my={3}>{post.text}</Text>
@@ -92,16 +102,6 @@ const PostPage = () => {
         <Actions post={post} />
       </Flex>
 
-      <Flex gap={2} alignItems={"center"}>
-        <Text color={"gray.light"} fontSize={"sm"}>
-          {post.replies.length} replies
-        </Text>
-        <Box w={0.5} h={0.5} borderRadius={"full"} bg={"gray.light"}></Box>
-        <Text color={"gray.light"} fontSize={"sm"}>
-          {post.likes.length} likes
-        </Text>
-      </Flex>
-
       <Divider my={4} />
 
       <Flex justifyContent={"space-between"}>
@@ -114,16 +114,11 @@ const PostPage = () => {
 
       <Divider my={4} />
 
-      {post.replies.length &&
-        post.replies.map((reply) => {
-          <Comment
-            comment={reply.text}
-            createdAt="1d"
-            likes={220}
-            username="John Doe"
-            userAvatar="https://bit.ly/dan-abramov"
-          />;
-        })}
+      {!post.replies.length && (
+        <Text textAlign={"center"} pt={6}>
+          No comments yet..
+        </Text>
+      )}
     </>
   );
 };
