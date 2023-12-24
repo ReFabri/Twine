@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   Box,
   Button,
@@ -19,12 +19,13 @@ import {
 import userAtom from "../atoms/userAtom";
 import PropTypes from "prop-types";
 import useShowToast from "../hooks/useShowToast";
+import postsAtom from "../atoms/postsAtom";
 
-const Actions = ({ post: post_ }) => {
+const Actions = ({ post }) => {
   const showToast = useShowToast();
   const user = useRecoilValue(userAtom);
-  const [liked, setLiked] = useState(post_.likes.includes(user?._id));
-  const [post, setPost] = useState(post_);
+  const [liked, setLiked] = useState(post.likes.includes(user?._id));
+  const [posts, setPosts] = useRecoilState(postsAtom);
   const [reply, setReply] = useState("");
   const [isLiking, setIsLiking] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
@@ -52,12 +53,17 @@ const Actions = ({ post: post_ }) => {
         return;
       }
       if (!liked) {
-        setPost((prev) => ({ ...prev, likes: [...prev.likes, user._id] }));
+        const updatedPosts = posts.map((p) => {
+          p._id === post._id ? { ...p, likes: [...p.likes, user._id] } : p;
+        });
+        setPosts(updatedPosts);
       } else {
-        setPost((prev) => ({
-          ...prev,
-          likes: post.likes.filter((id) => id !== user._id),
-        }));
+        const updatedPosts = posts.map((p) => {
+          p._id === post._id
+            ? { ...p, likes: p.likes.filter((id) => id !== user._id) }
+            : p;
+        });
+        setPosts(updatedPosts);
       }
       setLiked(!liked);
     } catch (error) {
@@ -86,7 +92,10 @@ const Actions = ({ post: post_ }) => {
       });
       const data = await res.json();
       if (data.error) return showToast("Error", data.error, "error");
-      setPost((prev) => ({ ...prev, replies: [...prev.replies, data.reply] }));
+      const updatedPosts = posts.map((p) => {
+        p._id === post._id ? { ...p, replies: [...p.replies, data] } : p;
+      });
+      setPosts(updatedPosts);
       showToast("Success", "Reply posted successfully", "success");
       onClose();
     } catch (error) {
