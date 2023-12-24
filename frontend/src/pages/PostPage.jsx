@@ -14,7 +14,7 @@ import Actions from "../components/Actions";
 import Comment from "../components/Comment";
 import useGetUserProfile from "../hooks/useGetUserProfile";
 import useShowToast from "../hooks/useShowToast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
@@ -25,6 +25,7 @@ const PostPage = () => {
   const { user, loading } = useGetUserProfile();
   const [post, setPost] = useState(null);
   const currentUser = useRecoilValue(userAtom);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getPosts = async () => {
@@ -41,7 +42,21 @@ const PostPage = () => {
   }, [pid, showToast]);
 
   const handleDeletePost = async () => {
-    //TODO
+    try {
+      if (!window.confirm("Are you sure you want to delete this post?")) return;
+      const res = await fetch(`/api/posts/${post._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.error) {
+        showToast("Error", data.error, "error");
+        return;
+      }
+      showToast("Success", "Post deleted", "success");
+      navigate(`/${user.username}`);
+    } catch (error) {
+      showToast("Error", error.message, "error");
+    }
   };
 
   if (!user && loading) {
@@ -115,10 +130,19 @@ const PostPage = () => {
       <Divider my={4} />
 
       {!post.replies.length && (
-        <Text textAlign={"center"} pt={6}>
-          No comments yet..
+        <Text textAlign={"center"} pt={6} pb={10}>
+          No comments on this post yet..
         </Text>
       )}
+
+      {post.replies.length > 0 &&
+        post.replies.map((reply) => (
+          <Comment
+            key={reply._id}
+            reply={reply}
+            lastReply={reply._id === post.replies[post.replies.length - 1]._id}
+          />
+        ))}
     </>
   );
 };
