@@ -17,6 +17,7 @@ import {
   Flex,
   Image,
   CloseButton,
+  Box,
 } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa6";
 import usePreviewImg from "../hooks/usePreviewImg";
@@ -82,16 +83,35 @@ const CreatePost = () => {
 
   return (
     <>
-      <Button
+      <Box
         position={"fixed"}
-        bg={useColorModeValue("gray.300", "gray.dark")}
         bottom={10}
         right={10}
-        leftIcon={<FaPlus size={25} />}
         onClick={onOpen}
+        width={57}
+        whiteSpace={"nowrap"}
+        overflow={"hidden"}
+        _hover={{ width: 120 }}
+        transition={"all"}
+        transitionDuration={"0.3s"}
+        borderRadius={5}
       >
-        Post
-      </Button>
+        <Button
+          bg={useColorModeValue("gray.300", "gray.dark")}
+          display={"inline-block"}
+        >
+          <FaPlus size={25} />
+        </Button>
+        <Text
+          px={3}
+          fontWeight={"bold"}
+          fontSize={"lg"}
+          cursor={"pointer"}
+          display={"inline-block"}
+        >
+          Post
+        </Text>
+      </Box>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
