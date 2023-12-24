@@ -22,8 +22,9 @@ import {
 import { FaPlus } from "react-icons/fa6";
 import usePreviewImg from "../hooks/usePreviewImg";
 import { BsFillImageFill } from "react-icons/bs";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
+import postsAtom from "../atoms/postsAtom";
 import useShowToast from "../hooks/useShowToast";
 
 const CreatePost = () => {
@@ -36,6 +37,7 @@ const CreatePost = () => {
   const user = useRecoilValue(userAtom);
   const showToast = useShowToast();
   const [loading, setLoading] = useState(false);
+  const setPosts = useSetRecoilState(postsAtom);
 
   const handleTextChange = (e) => {
     const inputText = e.target.value;
@@ -71,9 +73,12 @@ const CreatePost = () => {
         return;
       }
       showToast("Success", "Post created successfully", "success");
-      onClose();
+      setPosts((prev) => {
+        return [data.newPost, ...prev];
+      });
       setPostText("");
       setImgUrl("");
+      onClose();
     } catch (error) {
       showToast("Error", error, "error");
     } finally {
@@ -85,27 +90,31 @@ const CreatePost = () => {
     <>
       <Box
         position={"fixed"}
-        bottom={10}
-        right={10}
+        bottom={{ base: 3, sm: 10 }}
+        right={{ base: 3, sm: 10 }}
         onClick={onOpen}
         width={57}
         whiteSpace={"nowrap"}
         overflow={"hidden"}
-        _hover={{ width: 120 }}
+        _hover={{
+          width: { base: 100, sm: 120 },
+          bg: useColorModeValue("gray.300", "gray.dark"),
+        }}
         transition={"all"}
         transitionDuration={"0.3s"}
         borderRadius={5}
       >
         <Button
+          size={{ base: "sm", sm: "md" }}
           bg={useColorModeValue("gray.300", "gray.dark")}
           display={"inline-block"}
         >
-          <FaPlus size={25} />
+          <FaPlus size={20} />
         </Button>
         <Text
           px={3}
           fontWeight={"bold"}
-          fontSize={"lg"}
+          fontSize={{ base: "sm", sm: "md" }}
           cursor={"pointer"}
           display={"inline-block"}
         >
