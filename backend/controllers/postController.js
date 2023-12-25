@@ -126,7 +126,10 @@ export const replyToPost = async (req, res) => {
 
     return res
       .status(200)
-      .json({ message: "Successfully replied to post", reply });
+      .json({
+        message: "Successfully replied to post",
+        reply: post.replies[post.replies.length - 1],
+      });
   } catch (error) {
     errorHandler(error, res);
   }
