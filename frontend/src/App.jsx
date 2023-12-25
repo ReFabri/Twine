@@ -7,7 +7,6 @@ import HomePage from "./pages/HomePage";
 import UserPage from "./pages/UserPage";
 import PostPage from "./pages/PostPage";
 import AuthPage from "./pages/AuthPage";
-import LogoutButton from "./components/LogoutButton";
 import UpdateProfilePage from "./pages/UpdateProfilePage";
 import CreatePost from "./components/CreatePost";
 
@@ -45,7 +44,6 @@ function App() {
         />
         <Route path="/:username/post/:pid" element={<PostPage />} />
       </Routes>
-      {user && <LogoutButton />}
     </Container>
   );
 }
