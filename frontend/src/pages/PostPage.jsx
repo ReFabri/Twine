@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import {
   Flex,
   Avatar,
@@ -16,30 +16,32 @@ import useGetUserProfile from "../hooks/useGetUserProfile";
 import useShowToast from "../hooks/useShowToast";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import userAtom from "../atoms/userAtom";
+import postsAtom from "../atoms/postsAtom";
 
 const PostPage = () => {
   const showToast = useShowToast();
   const { pid } = useParams();
   const { user, loading } = useGetUserProfile();
-  const [post, setPost] = useState(null);
+  const [posts, setPosts] = useRecoilState(postsAtom);
+  const post = posts[0];
   const currentUser = useRecoilValue(userAtom);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getPosts = async () => {
+    const getPost = async () => {
       try {
         const res = await fetch(`/api/posts/${pid}`);
         const data = await res.json();
         if (data.error) return showToast("Error", data.error, "error");
-        setPost(data);
+        setPosts([data]);
       } catch (error) {
         showToast("Error", error.message, "error");
       }
     };
-    getPosts();
-  }, [pid, showToast]);
+    getPost();
+  }, [pid, showToast, setPosts]);
 
   const handleDeletePost = async () => {
     try {
