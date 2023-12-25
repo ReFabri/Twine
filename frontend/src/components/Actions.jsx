@@ -54,12 +54,14 @@ const Actions = ({ post }) => {
       }
       if (!liked) {
         const updatedPosts = posts.map((p) => {
-          p._id === post._id ? { ...p, likes: [...p.likes, user._id] } : p;
+          return p._id === post._id
+            ? { ...p, likes: [...p.likes, user._id] }
+            : p;
         });
         setPosts(updatedPosts);
       } else {
         const updatedPosts = posts.map((p) => {
-          p._id === post._id
+          return p._id === post._id
             ? { ...p, likes: p.likes.filter((id) => id !== user._id) }
             : p;
         });
@@ -93,7 +95,9 @@ const Actions = ({ post }) => {
       const data = await res.json();
       if (data.error) return showToast("Error", data.error, "error");
       const updatedPosts = posts.map((p) => {
-        p._id === post._id ? { ...p, replies: [...p.replies, data] } : p;
+        return p._id === post._id
+          ? { ...p, replies: [...p.replies, data.reply] }
+          : p;
       });
       setPosts(updatedPosts);
       showToast("Success", "Reply posted successfully", "success");
