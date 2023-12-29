@@ -5,6 +5,7 @@ import {
   Link,
   Button,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
@@ -22,17 +23,19 @@ const Header = () => {
 
   return (
     <Flex justifyContent={user ? "space-between" : "right"} mt={6} mb="12">
-      <Image
-        position={"absolute"}
-        top={1}
-        left={"50%"}
-        transform="translateX(-50%)"
-        cursor={"pointer"}
-        alt="logo"
-        width={10}
-        src={colorMode === "dark" ? "/light-logo.svg" : "/dark-logo.svg"}
-        onClick={toggleColorMode}
-      />
+      <Tooltip label={"Change Theme"}>
+        <Image
+          position={"absolute"}
+          top={1}
+          left={"50%"}
+          transform="translateX(-50%)"
+          cursor={"pointer"}
+          alt="logo"
+          width={10}
+          src={colorMode === "dark" ? "/light-logo.svg" : "/dark-logo.svg"}
+          onClick={toggleColorMode}
+        />
+      </Tooltip>
 
       {user && (
         <>

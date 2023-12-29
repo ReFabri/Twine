@@ -14,7 +14,7 @@ function App() {
   const user = useRecoilValue(userAtom);
 
   return (
-    <Container maxWidth="620px">
+    <Container maxWidth={{ base: "620px", md: "900px" }}>
       <Header />
       <Routes>
         <Route
