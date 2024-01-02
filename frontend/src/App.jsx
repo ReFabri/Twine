@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Container } from "@chakra-ui/react";
 import { useRecoilValue } from "recoil";
 import userAtom from "./atoms/userAtom";
@@ -12,9 +12,12 @@ import CreatePost from "./components/CreatePost";
 
 function App() {
   const user = useRecoilValue(userAtom);
+  const { pathname } = useLocation();
 
   return (
-    <Container maxWidth={{ base: "620px", md: "900px" }}>
+    <Container
+      maxWidth={pathname === "/" ? { base: "620px", md: "900px" } : "620px"}
+    >
       <Header />
       <Routes>
         <Route
