@@ -8,10 +8,10 @@ const useShowToast = () => {
     (title, description, status) => {
       toast({
         title,
-        description,
         status,
-        duration: 5000,
         isClosable: true,
+        duration: 5000,
+        description: description.toString(),
       });
     },
     [toast]
