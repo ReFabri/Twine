@@ -7,7 +7,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/api": {
-        target: "https://twine.onrender.com/",
+        target: "https://twine.onrender.com",
         changeOrigin: true,
         secure: true,
       },
