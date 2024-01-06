@@ -10,8 +10,10 @@
   "scripts": {
     "start": "node server.js",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "preview": "concurrently \"npm run backend\" \"npm run frontPreview\"",
     "backend": "nodemon server.js",
     "frontend": "cd ../frontend && npm run dev",
+    "frontPreview": "cd ../frontend && npm run preview",
     "build": "cd ../frontend && npm install && npm run build"
   },
   "keywords": [],
